@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Read-only token: this workflow never writes to the repository.
+permissions:
+  contents: read
+
+# A newer push to the same branch or pull request cancels the run it supersedes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check and build Storybook
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # Installs pnpm from packageManager and Node.js from devEngines.runtime, then runs pnpm install.
+      - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
+        with:
+          require-lockfile: true
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm run check
+      - run: pnpm run build-storybook

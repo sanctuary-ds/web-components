@@ -3,6 +3,7 @@ dist/
 custom-elements.json
 storybook-static/
 coverage/
+.vitest/
 .codegraph/
 .atl/
 odd/

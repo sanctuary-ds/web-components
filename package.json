@@ -46,6 +46,14 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./button": {
+      "types": "./dist/components/button/index.d.ts",
+      "default": "./dist/components/button/index.js"
+    },
+    "./button/register": {
+      "types": "./dist/components/button/register.d.ts",
+      "default": "./dist/components/button/register.js"
+    },
     "./styles": {
       "types": "./dist/styles/index.d.ts",
       "default": "./dist/styles/index.js"
@@ -54,7 +62,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "node -e \"import('node:fs').then(fs => fs.rmSync('dist', { recursive: true, force: true }))\" && tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "biome check . && eslint .",
     "lint:fix": "biome check --write . && eslint --fix .",

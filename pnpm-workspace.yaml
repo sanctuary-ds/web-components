@@ -1,0 +1,9 @@
+allowBuilds:
+  esbuild: true
+  rs-module-lexer: true
+minimumReleaseAgeExclude:
+  - "@sanctuary-ds/tokens@0.4.0"
+  - "@storybook/builder-vite@10.6.8"
+  - "@storybook/web-components-vite@10.6.8"
+  - "@storybook/web-components@10.6.8"
+  - storybook@10.6.8

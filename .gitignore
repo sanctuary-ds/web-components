@@ -1,0 +1,9 @@
+node_modules/
+dist/
+storybook-static/
+coverage/
+.codegraph/
+.atl/
+odd/
+*.log
+*.tsbuildinfo

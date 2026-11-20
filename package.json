@@ -64,9 +64,9 @@
     "cem": "cem analyze",
     "api": "node scripts/api-report.ts",
     "api:check": "node scripts/api-report.ts --check",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "check": "pnpm run typecheck && pnpm run lint && pnpm run build && pnpm run cem && pnpm run api:check && pnpm test"
+    "storybook": "pnpm run cem && storybook dev -p 6006",
+    "build-storybook": "pnpm run cem && storybook build",
+    "check": "pnpm run cem && pnpm run typecheck && pnpm run lint && pnpm run build && pnpm run api:check && pnpm test"
   },
   "dependencies": {
     "lit": "^3.3.3"
@@ -78,6 +78,7 @@
     "@biomejs/biome": "^2.6.8",
     "@custom-elements-manifest/analyzer": "^0.11.0",
     "@sanctuary-ds/tokens": "0.4.0",
+    "@storybook/addon-a11y": "^10.6.8",
     "@storybook/web-components-vite": "^10.6.8",
     "@types/node": "^26.6.6",
     "@typescript-eslint/parser": "^8.73.0",

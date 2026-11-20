@@ -179,6 +179,9 @@ importers:
       '@sanctuary-ds/tokens':
         specifier: 0.4.0
         version: 0.4.0
+      '@storybook/addon-a11y':
+        specifier: ^10.6.8
+        version: 10.6.8(storybook@10.6.8(react@19.3.1))
       '@storybook/web-components-vite':
         specifier: ^10.6.8
         version: 10.6.8(lit@3.3.3)(storybook@10.6.8(react@19.3.1))(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2))
@@ -1068,6 +1071,11 @@ packages:
 
   '@sanctuary-ds/tokens@0.4.0':
     resolution: {integrity: sha512-FDba+s9mYjmL+VBYS6B2qlS1Lebe8JRniC9pgE3d0DbuqVQfbHkRcw18ylWrKSmmm/Mf5JQKwFWI2+qaZUE2Xw==}
+
+  '@storybook/addon-a11y@10.6.8':
+    resolution: {integrity: sha512-+tzs6nyvy4A4/tCFcXZoYrt7d5K8nQN8p7H1nP1GFicTHY4mlQpebP2PZUBcitupXUpyvHfYvw8fJUhrQKJC4Q==}
+    peerDependencies:
+      storybook: ^10.6.8
 
   '@storybook/builder-vite@10.6.8':
     resolution: {integrity: sha512-prL9t88RSzN3uk8Kzx5LnkqIODhRbwKa0PMryTlIEcew1J1hAiXcCNCJTDM5uhKjTO8s4OSBsCozVozdd+C2TQ==}
@@ -2930,6 +2938,12 @@ snapshots:
   '@rolldown/pluginutils@1.1.1': {}
 
   '@sanctuary-ds/tokens@0.4.0': {}
+
+  '@storybook/addon-a11y@10.6.8(storybook@10.6.8(react@19.3.1))':
+    dependencies:
+      '@storybook/global': 5.0.0
+      axe-core: 4.14.1
+      storybook: 10.6.8(react@19.3.1)
 
   '@storybook/builder-vite@10.6.8(storybook@10.6.8(react@19.3.1))(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2))':
     dependencies:

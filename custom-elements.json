@@ -1,0 +1,251 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "defineElement",
+          "declaration": {
+            "name": "defineElement",
+            "module": "./internal/register.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SanctuaryElement",
+          "declaration": {
+            "name": "SanctuaryElement",
+            "module": "./internal/sanctuary-element.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "focusStyles",
+          "declaration": {
+            "name": "focusStyles",
+            "module": "./styles/index.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "resetStyles",
+          "declaration": {
+            "name": "resetStyles",
+            "module": "./styles/index.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/styles/focus.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "focusStyles",
+          "default": "css` :focus-visible { outline: var(--san-focus-ring, 0.125rem solid currentColor); outline-offset: var(--san-focus-ring-offset, 0.125rem); } :focus:not(:focus-visible) { outline: none; } @media (forced-colors: active) { :focus-visible { outline-color: Highlight; } } `",
+          "description": "Shared `:focus-visible` indicator bound to Sanctuary 0.4+ focus tokens.\n\nUses `outline` rather than `box-shadow` so focus indicators remain legible on\nevery surface tier (`surface-sunken` through `surface-raised-4`) and survive\n`@media (forced-colors: active)`."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "focusStyles",
+          "declaration": {
+            "name": "focusStyles",
+            "module": "src/styles/focus.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/styles/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "focusStyles",
+          "declaration": {
+            "name": "focusStyles",
+            "module": "./focus.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "resetStyles",
+          "declaration": {
+            "name": "resetStyles",
+            "module": "./reset.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/styles/reset.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "resetStyles",
+          "default": "css` :host { box-sizing: border-box; } :host([hidden]), [hidden] { display: none !important; } *, *::before, *::after { box-sizing: inherit; } `",
+          "description": "Base host and box-model reset shared across Sanctuary components.\n\nKeeps `[hidden]` authoritative even when a component declares an explicit\n`display` value on `:host`, preventing hidden hosts from remaining visible\nor focusable in the accessibility tree."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "resetStyles",
+          "declaration": {
+            "name": "resetStyles",
+            "module": "src/styles/reset.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/internal/register.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "defineElement",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "parameters": [
+            {
+              "name": "tagName",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "elementClass",
+              "type": {
+                "text": "CustomElementConstructor"
+              }
+            }
+          ],
+          "description": "Registers a custom element idempotently and safely across SSR, HMR, and\nmicro-frontend bundles.\n\n- No-ops outside a browser `customElements` registry.\n- No-ops when the same constructor is already registered under `tagName`.\n- Warns instead of throwing if a different constructor already claimed `tagName`."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "defineElement",
+          "declaration": {
+            "name": "defineElement",
+            "module": "src/internal/register.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "tagName",
+          "declaration": {
+            "name": "elementClass",
+            "module": "src/internal/register.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/internal/sanctuary-element.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Base class for Sanctuary custom elements.\n\nAttaches `ElementInternals` once in the constructor and exposes helpers for\n`CustomStateSet` (`:state(...)`) without shadowing any standard global\nHTML or ARIA host attributes.",
+          "name": "SanctuaryElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "#internals",
+              "privacy": "private",
+              "type": {
+                "text": "ElementInternals | null"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "internals",
+              "type": {
+                "text": "ElementInternals | null"
+              },
+              "privacy": "protected",
+              "description": "ElementInternals instance attached to this host, or `null` in runtimes\nthat do not implement `attachInternals()`.",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "setCustomState",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "active",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Adds or removes a runtime custom state on `ElementInternals.states`,\nmatchable via `:state(<name>)` in CSS."
+            },
+            {
+              "kind": "method",
+              "name": "hasCustomState",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Reports whether a runtime custom state is currently active on this host."
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SanctuaryElement",
+          "declaration": {
+            "name": "SanctuaryElement",
+            "module": "src/internal/sanctuary-element.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

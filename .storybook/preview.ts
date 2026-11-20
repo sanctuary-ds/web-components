@@ -53,6 +53,10 @@ const preview: Preview = {
     backgrounds: {
       disable: true,
     },
+    controls: {
+      expanded: true,
+      sort: "requiredFirst",
+    },
   },
   globalTypes: {
     flavor: {

@@ -20,6 +20,7 @@ Cross-repository contracts live in [`tokens/docs/ecosystem.md`](https://github.c
 - **Glazing is a system axis.** Components honor the active `data-san-glazing` (`pot-metal`, `flashed`, `grisaille`), `data-san-flavor` (`lauds`, `vespers`, `compline`, `matins`), and `data-san-accent` from the host or any ancestor.
 - **Accessibility is part of the contract.** Every component uses `:focus-visible` with `--san-focus-ring` and `--san-focus-ring-offset` (preserving `forced-colors: active`), honors `prefers-reduced-motion`, wraps native controls or uses `ElementInternals` ARIA/FACE APIs properly, never conveys status by color alone, and passes `axe-core` in real Chromium.
 - **The contract is written down.** `custom-elements.json` and `api/web-components.api.txt` guard the public surface in CI.
+- **Poetic craft, universal API.** Keep Sanctuary's poetic vocabulary in tokens and visual craft (stone, glass, light, cast glow, physical `translate: 0 1px` press, `--san-radius-sm`/`--san-radius-md` geometry), while component props use universal self-descriptive industry names (`filled`, `soft`, `outlined`, `ghost`; `accent`, `danger`, `warning`, `success`, `info`) with expanded, categorized, documented Storybook controls.
 
 ## Contract with `@sanctuary-ds/tokens`
 

@@ -214,7 +214,7 @@ export class SanButton extends SanctuaryElement {
   };
 
   readonly #handleControlClick = (event: MouseEvent): void => {
-    if (event.defaultPrevented || this.#isDisabled || this.loading || this.href !== undefined) {
+    if (event.defaultPrevented || this.#isDisabled || this.loading || this.href != null) {
       return;
     }
 
@@ -239,8 +239,8 @@ export class SanButton extends SanctuaryElement {
     }
 
     const restoreAttributes: Array<() => void> = [];
-    const applyOverride = (attr: string, value: string | undefined) => {
-      if (value === undefined) {
+    const applyOverride = (attr: string, value: string | null | undefined) => {
+      if (value == null) {
         return;
       }
       const hadAttr = form.hasAttribute(attr);
@@ -320,7 +320,7 @@ export class SanButton extends SanctuaryElement {
   protected override render() {
     const disabled = this.#isDisabled;
 
-    if (this.href !== undefined) {
+    if (this.href != null) {
       const resolvedRel =
         this.rel ?? (this.target === "_blank" ? "noopener noreferrer" : undefined);
 

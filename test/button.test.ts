@@ -256,6 +256,11 @@ describe("<san-button>", () => {
     expect(disabledAnchor.getAttribute("aria-disabled")).toBe("true");
     expect(disabledAnchor.getAttribute("tabindex")).toBe("-1");
     await expectAccessible(disabledLink);
+
+    // Removing href attribute returns the control from <a> back to <button>
+    link.removeAttribute("href");
+    await link.updateComplete;
+    expect(getControl(link).tagName).toBe("BUTTON");
   });
 
   it("integrates with <form> for submit, reset, formnovalidate, and <fieldset disabled>", async () => {
@@ -325,6 +330,65 @@ describe("<san-button>", () => {
 
     await userEvent.click(submitBtn);
     expect(submitSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it("applies and restores form overrides and ignores removed form override attributes", async () => {
+    const form = document.createElement("form");
+    form.setAttribute("action", "/original");
+    form.setAttribute("method", "get");
+    form.innerHTML = `
+      <san-button
+        type="submit"
+        formaction="/override"
+        formmethod="post"
+        formenctype="multipart/form-data"
+        formtarget="_blank"
+      >
+        Save
+      </san-button>
+    `;
+    document.body.append(form);
+
+    const submitBtn = form.querySelector("san-button") as SanButton;
+    await submitBtn.updateComplete;
+
+    let observedAction: string | null = null;
+    let observedMethod: string | null = null;
+    let observedEnctype: string | null = null;
+    let observedTarget: string | null = null;
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      observedAction = form.getAttribute("action");
+      observedMethod = form.getAttribute("method");
+      observedEnctype = form.getAttribute("enctype");
+      observedTarget = form.getAttribute("target");
+    });
+
+    await userEvent.click(submitBtn);
+    expect(observedAction).toBe("/override");
+    expect(observedMethod).toBe("post");
+    expect(observedEnctype).toBe("multipart/form-data");
+    expect(observedTarget).toBe("_blank");
+
+    // Original attributes restored and absent ones removed
+    expect(form.getAttribute("action")).toBe("/original");
+    expect(form.getAttribute("method")).toBe("get");
+    expect(form.hasAttribute("enctype")).toBe(false);
+    expect(form.hasAttribute("target")).toBe(false);
+
+    // Removing form override attributes must not write "null" onto the form
+    submitBtn.removeAttribute("formaction");
+    submitBtn.removeAttribute("formmethod");
+    submitBtn.removeAttribute("formenctype");
+    submitBtn.removeAttribute("formtarget");
+    await submitBtn.updateComplete;
+
+    await userEvent.click(submitBtn);
+    expect(observedAction).toBe("/original");
+    expect(observedMethod).toBe("get");
+    expect(observedEnctype).toBeNull();
+    expect(observedTarget).toBeNull();
   });
 
   it("handles loading state with :state(loading), aria-busy, focusability, click blocking, and zero CLS", async () => {

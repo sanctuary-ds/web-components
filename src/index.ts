@@ -1,4 +1,10 @@
 export {
+  type BadgeIntent,
+  type BadgeSize,
+  type BadgeVariant,
+  SanBadge,
+} from "./components/badge/index.js";
+export {
   type ButtonIntent,
   type ButtonSize,
   type ButtonType,

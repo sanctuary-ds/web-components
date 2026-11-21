@@ -3,6 +3,8 @@
 
 ## Package exports
   . -> { default: ./dist/index.js, types: ./dist/index.d.ts }
+  ./badge -> { default: ./dist/components/badge/index.js, types: ./dist/components/badge/index.d.ts }
+  ./badge/register -> { default: ./dist/components/badge/register.js, types: ./dist/components/badge/register.d.ts }
   ./button -> { default: ./dist/components/button/index.js, types: ./dist/components/button/index.d.ts }
   ./button/register -> { default: ./dist/components/button/register.js, types: ./dist/components/button/register.d.ts }
   ./custom-elements.json -> ./custom-elements.json
@@ -22,6 +24,9 @@
     @sanctuary-ds/tokens: >=0.4.0 <1.0.0
 
 ## Exported declarations
+  src/components/badge/index.ts: js:BadgeIntent, js:BadgeSize, js:BadgeVariant, js:SanBadge
+  src/components/badge/san-badge.styles.ts: js:badgeStyles
+  src/components/badge/san-badge.ts: js:SanBadge
   src/components/button/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:SanButton
   src/components/button/san-button.styles.ts: js:buttonStyles
   src/components/button/san-button.ts: js:SanButton
@@ -34,12 +39,37 @@
   src/components/toggle-button/index.ts: js:SanToggleButton, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
   src/components/toggle-button/san-toggle-button.styles.ts: js:toggleButtonStyles
   src/components/toggle-button/san-toggle-button.ts: js:SanToggleButton
-  src/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanButton, js:SanctuaryElement, js:SanIconButton, js:SanToggleButton, js:SanToggleButtonGroup, js:ToggleButtonGroupOrientation, js:ToggleButtonGroupSelection, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
+  src/index.ts: js:BadgeIntent, js:BadgeSize, js:BadgeVariant, js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanBadge, js:SanButton, js:SanctuaryElement, js:SanIconButton, js:SanToggleButton, js:SanToggleButtonGroup, js:ToggleButtonGroupOrientation, js:ToggleButtonGroupSelection, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
   src/styles/focus.ts: js:focusStyles
   src/styles/index.ts: js:focusStyles, js:resetStyles
   src/styles/reset.ts: js:resetStyles
 
 ## Custom elements
+  <san-badge> (SanBadge)
+    attr dot: boolean
+    attr intent: BadgeIntent
+    attr label: string
+    attr pill: boolean
+    attr size: BadgeSize
+    attr variant: BadgeVariant
+    slot (default)
+    slot end
+    slot start
+    part base
+    part dot
+    part end
+    part label
+    part start
+    cssprop --san-badge-bg
+    cssprop --san-badge-border
+    cssprop --san-badge-dot-size = 0.5rem
+    cssprop --san-badge-fg
+    cssprop --san-badge-font = var(--san-type-label-md)
+    cssprop --san-badge-gap = var(--san-space-1-5)
+    cssprop --san-badge-height = 1.5rem
+    cssprop --san-badge-icon-size = 0.875rem
+    cssprop --san-badge-padding-inline = var(--san-space-2)
+    cssprop --san-badge-radius = var(--san-radius-sm)
   <san-button> (SanButton)
     attr disabled: boolean
     attr download: string | undefined

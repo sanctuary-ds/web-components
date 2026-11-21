@@ -4,8 +4,6 @@ import "./register.js";
 import type { ButtonIntent, ButtonSize, ButtonType, ButtonVariant } from "./index.js";
 
 interface ButtonStoryArgs {
-  label: string;
-  showStartIcon: boolean;
   variant: ButtonVariant;
   intent: ButtonIntent;
   size: ButtonSize;
@@ -49,16 +47,6 @@ const meta: Meta<ButtonStoryArgs> = {
       control: "boolean",
       description: "Applies fully rounded pill corners (`--san-radius-full`).",
       table: { category: "Appearance" },
-    },
-    label: {
-      control: "text",
-      description: "Default slot text label rendered inside the button.",
-      table: { category: "Content" },
-    },
-    showStartIcon: {
-      control: "boolean",
-      description: "Preview toggle rendering a leading SVG icon in the `start` slot.",
-      table: { category: "Content" },
     },
     disabled: {
       control: "boolean",
@@ -108,20 +96,13 @@ const meta: Meta<ButtonStoryArgs> = {
       description: 'Field value submitted with the form when `type="submit"`.',
       table: { category: "Form" },
     },
-    formAction: { table: { category: "Form" } },
-    formEnctype: { table: { category: "Form" } },
-    formMethod: { table: { category: "Form" } },
-    formNoValidate: { table: { category: "Form" } },
-    formTarget: { table: { category: "Form" } },
-    styles: { table: { disable: true } },
-    shadowRootOptions: { table: { disable: true } },
-    formAssociated: { table: { disable: true } },
-    formDisabledCallback: { table: { disable: true } },
-    properties: { table: { disable: true } },
+    formAction: { control: false, table: { category: "Form" } },
+    formEnctype: { control: false, table: { category: "Form" } },
+    formMethod: { control: false, table: { category: "Form" } },
+    formNoValidate: { control: false, table: { category: "Form" } },
+    formTarget: { control: false, table: { category: "Form" } },
   },
   args: {
-    label: "Publish release",
-    showStartIcon: false,
     variant: "filled",
     intent: "accent",
     size: "md",
@@ -180,8 +161,7 @@ export const Overview: StoryObj<ButtonStoryArgs> = {
       rel=${args.rel || nothing}
       download=${args.download || nothing}
     >
-      ${args.showStartIcon ? iconSpark("start") : nothing}
-      ${args.label}
+      Publish release
     </san-button>
   `,
 };

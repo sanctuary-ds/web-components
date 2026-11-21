@@ -10,7 +10,57 @@ import { type Preview, setCustomElementsManifest } from "@storybook/web-componen
 import { html } from "lit";
 import customElements from "../custom-elements.json" with { type: "json" };
 
-setCustomElementsManifest(customElements);
+interface CemManifest {
+  modules?: Array<{
+    declarations?: Array<{
+      members?: Array<{ name?: string }>;
+      attributes?: Array<{ name?: string; fieldName?: string }>;
+    }>;
+  }>;
+}
+
+/**
+ * Deduplicates Storybook Controls when a component exposes both a camelCase JS
+ * property (e.g. `formAction`) and its lowercase HTML attribute (`formaction`).
+ * `custom-elements.json` on disk stays untouched for HTML/IDE autocompletion.
+ */
+function prepareStorybookManifest(manifest: CemManifest): CemManifest {
+  if (!Array.isArray(manifest.modules)) {
+    return manifest;
+  }
+
+  return {
+    ...manifest,
+    modules: manifest.modules.map((mod) => {
+      if (!Array.isArray(mod.declarations)) {
+        return mod;
+      }
+
+      return {
+        ...mod,
+        declarations: mod.declarations.map((decl) => {
+          if (!Array.isArray(decl.attributes) || !Array.isArray(decl.members)) {
+            return decl;
+          }
+          const memberNames = new Set(decl.members.map((member) => member.name));
+          return {
+            ...decl,
+            attributes: decl.attributes.filter(
+              (attr) =>
+                !(
+                  attr.fieldName &&
+                  attr.fieldName !== attr.name &&
+                  memberNames.has(attr.fieldName)
+                ),
+            ),
+          };
+        }),
+      };
+    }),
+  };
+}
+
+setCustomElementsManifest(prepareStorybookManifest(customElements as CemManifest));
 
 const flavorItems = Object.entries(flavors).map(([id, flavor]) => ({
   value: id,

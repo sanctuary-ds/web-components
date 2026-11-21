@@ -12,6 +12,11 @@ export {
   type ToggleButtonSize,
   type ToggleButtonVariant,
 } from "./components/toggle-button/index.js";
+export {
+  SanToggleButtonGroup,
+  type ToggleButtonGroupOrientation,
+  type ToggleButtonGroupSelection,
+} from "./components/toggle-button-group/index.js";
 export { defineElement } from "./internal/register.js";
 export { SanctuaryElement } from "./internal/sanctuary-element.js";
 export { focusStyles, resetStyles } from "./styles/index.js";

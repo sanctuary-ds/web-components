@@ -87,6 +87,10 @@ export const toggleButtonStyles = css`
     padding-block: var(--san-toggle-button-padding-block, var(--_padding-block));
     padding-inline: var(--san-toggle-button-padding-inline, var(--_padding-inline));
     gap: var(--san-toggle-button-gap, var(--san-space-2));
+    border-start-start-radius: var(--_san-toggle-button-radius-ss, var(--_btn-radius, var(--_radius)));
+    border-start-end-radius: var(--_san-toggle-button-radius-se, var(--_btn-radius, var(--_radius)));
+    border-end-start-radius: var(--_san-toggle-button-radius-es, var(--_btn-radius, var(--_radius)));
+    border-end-end-radius: var(--_san-toggle-button-radius-ee, var(--_btn-radius, var(--_radius)));
     text-align: center;
     white-space: normal;
   }

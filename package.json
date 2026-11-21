@@ -70,6 +70,14 @@
       "types": "./dist/components/toggle-button/register.d.ts",
       "default": "./dist/components/toggle-button/register.js"
     },
+    "./toggle-button-group": {
+      "types": "./dist/components/toggle-button-group/index.d.ts",
+      "default": "./dist/components/toggle-button-group/index.js"
+    },
+    "./toggle-button-group/register": {
+      "types": "./dist/components/toggle-button-group/register.d.ts",
+      "default": "./dist/components/toggle-button-group/register.js"
+    },
     "./styles": {
       "types": "./dist/styles/index.d.ts",
       "default": "./dist/styles/index.js"

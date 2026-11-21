@@ -41,7 +41,7 @@ Cross-repository contracts live in [`tokens/docs/ecosystem.md`](https://github.c
 
 - [x] `<san-button>` (actions, intents, glazing, native form integration)
 - [x] `<san-icon-button>`
-- [ ] `<san-toggle-button>` / `<san-toggle-button-group>` (stateful pressed button supporting text, icon+text, and icon-only)
+- [x] `<san-toggle-button>` / `<san-toggle-button-group>` (stateful pressed button supporting text, icon+text, and icon-only)
 - [ ] `<san-chip>` / `<san-badge>`
 - [ ] `<san-card>`
 

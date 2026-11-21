@@ -6,6 +6,8 @@
   ./button -> { default: ./dist/components/button/index.js, types: ./dist/components/button/index.d.ts }
   ./button/register -> { default: ./dist/components/button/register.js, types: ./dist/components/button/register.d.ts }
   ./custom-elements.json -> ./custom-elements.json
+  ./icon-button -> { default: ./dist/components/icon-button/index.js, types: ./dist/components/icon-button/index.d.ts }
+  ./icon-button/register -> { default: ./dist/components/icon-button/register.js, types: ./dist/components/icon-button/register.d.ts }
   ./package.json -> ./package.json
   ./styles -> { default: ./dist/styles/index.js, types: ./dist/styles/index.d.ts }
 
@@ -19,7 +21,10 @@
   src/components/button/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:SanButton
   src/components/button/san-button.styles.ts: js:buttonStyles
   src/components/button/san-button.ts: js:SanButton
-  src/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanButton, js:SanctuaryElement
+  src/components/icon-button/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:SanIconButton
+  src/components/icon-button/san-icon-button.styles.ts: js:iconButtonStyles
+  src/components/icon-button/san-icon-button.ts: js:SanIconButton
+  src/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanButton, js:SanctuaryElement, js:SanIconButton
   src/styles/focus.ts: js:focusStyles
   src/styles/index.ts: js:focusStyles, js:resetStyles
   src/styles/reset.ts: js:resetStyles
@@ -62,3 +67,34 @@
     cssprop --san-button-padding-block = var(--san-space-1-5)
     cssprop --san-button-padding-inline = var(--san-space-4)
     cssprop --san-button-radius = var(--san-radius-md)
+  <san-icon-button> (SanIconButton)
+    attr disabled: boolean
+    attr download: string | undefined
+    attr formaction: string | undefined
+    attr formenctype: string | undefined
+    attr formmethod: string | undefined
+    attr formnovalidate: boolean
+    attr formtarget: string | undefined
+    attr href: string | undefined
+    attr intent: ButtonIntent
+    attr label: string
+    attr loading: boolean
+    attr name: string
+    attr pill: boolean
+    attr rel: string | undefined
+    attr size: ButtonSize
+    attr target: string | undefined
+    attr type: ButtonType
+    attr value: string
+    attr variant: ButtonVariant
+    slot (default)
+    part base
+    part icon
+    part spinner
+    cssprop --san-icon-button-bg
+    cssprop --san-icon-button-bg-hover
+    cssprop --san-icon-button-border
+    cssprop --san-icon-button-fg
+    cssprop --san-icon-button-icon-size = var(--san-size-icon-md)
+    cssprop --san-icon-button-radius = var(--san-radius-md)
+    cssprop --san-icon-button-size = var(--san-size-control-md)

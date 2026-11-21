@@ -75,7 +75,8 @@ export class SanIconButton extends ButtonBase {
   }
 
   protected override get controlAriaLabel(): string | undefined {
-    if (this.label.trim()) {
+    const label = typeof this.label === "string" ? this.label.trim() : "";
+    if (label) {
       return this.label;
     }
     const hostAriaLabel = this.getAttribute("aria-label");
@@ -85,9 +86,10 @@ export class SanIconButton extends ButtonBase {
   protected override updated(changedProperties: PropertyValues<this>): void {
     super.updated(changedProperties);
 
+    const hasLabel = typeof this.label === "string" && this.label.trim().length > 0;
     if (
       !this.#warnedMissingLabel &&
-      !this.label.trim() &&
+      !hasLabel &&
       !this.hasAttribute("aria-label") &&
       !this.hasAttribute("aria-labelledby")
     ) {

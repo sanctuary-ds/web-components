@@ -249,6 +249,31 @@ describe("<san-icon-button>", () => {
     await expectAccessible(withLabel);
   });
 
+  it("handles removed or undefined label without throwing and restores aria-label when re-set", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const btn = renderIconButton(
+      `<san-icon-button label="Close dialog">${SAMPLE_ICON}</san-icon-button>`,
+    );
+    await btn.updateComplete;
+    expect(getControl(btn).getAttribute("aria-label")).toBe("Close dialog");
+
+    // Removing the attribute causes Lit to assign null to a String property
+    btn.removeAttribute("label");
+    await btn.updateComplete;
+    expect(getControl(btn).hasAttribute("aria-label")).toBe(false);
+    expect(warnSpy).toHaveBeenCalledOnce();
+
+    // Frameworks may also assign undefined directly to the property
+    (btn as unknown as { label: string | undefined }).label = undefined;
+    await btn.updateComplete;
+    expect(getControl(btn).hasAttribute("aria-label")).toBe(false);
+
+    btn.label = "Restore dialog";
+    await btn.updateComplete;
+    expect(getControl(btn).getAttribute("aria-label")).toBe("Restore dialog");
+    await expectAccessible(btn);
+  });
+
   it("renders link mode with href, safe target=_blank rel, and returns to button when href is removed", async () => {
     const link = renderIconButton(
       `<san-icon-button href="https://example.com" target="_blank" label="Open docs">${SAMPLE_ICON}</san-icon-button>`,

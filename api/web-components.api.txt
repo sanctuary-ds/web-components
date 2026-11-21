@@ -11,6 +11,8 @@
   ./package.json -> ./package.json
   ./styles -> { default: ./dist/styles/index.js, types: ./dist/styles/index.d.ts }
   ./toggle-button -> { default: ./dist/components/toggle-button/index.js, types: ./dist/components/toggle-button/index.d.ts }
+  ./toggle-button-group -> { default: ./dist/components/toggle-button-group/index.js, types: ./dist/components/toggle-button-group/index.d.ts }
+  ./toggle-button-group/register -> { default: ./dist/components/toggle-button-group/register.js, types: ./dist/components/toggle-button-group/register.d.ts }
   ./toggle-button/register -> { default: ./dist/components/toggle-button/register.js, types: ./dist/components/toggle-button/register.d.ts }
 
 ## Package metadata
@@ -26,10 +28,13 @@
   src/components/icon-button/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:SanIconButton
   src/components/icon-button/san-icon-button.styles.ts: js:iconButtonStyles
   src/components/icon-button/san-icon-button.ts: js:SanIconButton
+  src/components/toggle-button-group/index.ts: js:SanToggleButtonGroup, js:ToggleButtonGroupOrientation, js:ToggleButtonGroupSelection
+  src/components/toggle-button-group/san-toggle-button-group.styles.ts: js:toggleButtonGroupStyles
+  src/components/toggle-button-group/san-toggle-button-group.ts: js:SanToggleButtonGroup
   src/components/toggle-button/index.ts: js:SanToggleButton, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
   src/components/toggle-button/san-toggle-button.styles.ts: js:toggleButtonStyles
   src/components/toggle-button/san-toggle-button.ts: js:SanToggleButton
-  src/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanButton, js:SanctuaryElement, js:SanIconButton, js:SanToggleButton, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
+  src/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanButton, js:SanctuaryElement, js:SanIconButton, js:SanToggleButton, js:SanToggleButtonGroup, js:ToggleButtonGroupOrientation, js:ToggleButtonGroupSelection, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
   src/styles/focus.ts: js:focusStyles
   src/styles/index.ts: js:focusStyles, js:resetStyles
   src/styles/reset.ts: js:resetStyles
@@ -135,3 +140,20 @@
     cssprop --san-toggle-button-pressed-border
     cssprop --san-toggle-button-pressed-fg
     cssprop --san-toggle-button-radius = var(--san-radius-md)
+  <san-toggle-button-group> (SanToggleButtonGroup)
+    attr disabled: boolean
+    attr intent: ToggleButtonIntent
+    attr label: string
+    attr mandatory: boolean
+    attr orientation: ToggleButtonGroupOrientation
+    attr pill: boolean
+    attr selection: ToggleButtonGroupSelection
+    attr separated: boolean
+    attr size: ToggleButtonSize
+    attr value: string
+    attr variant: ToggleButtonVariant
+    event change
+    slot (default)
+    part base
+    cssprop --san-toggle-button-group-gap = var(--san-space-2)
+    cssprop --san-toggle-button-group-radius = var(--san-radius-md)

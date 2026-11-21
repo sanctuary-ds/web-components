@@ -5,6 +5,7 @@ export {
   type ButtonVariant,
   SanButton,
 } from "./components/button/index.js";
+export { SanIconButton } from "./components/icon-button/index.js";
 export { defineElement } from "./internal/register.js";
 export { SanctuaryElement } from "./internal/sanctuary-element.js";
 export { focusStyles, resetStyles } from "./styles/index.js";

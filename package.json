@@ -54,6 +54,14 @@
       "types": "./dist/components/button/register.d.ts",
       "default": "./dist/components/button/register.js"
     },
+    "./icon-button": {
+      "types": "./dist/components/icon-button/index.d.ts",
+      "default": "./dist/components/icon-button/index.js"
+    },
+    "./icon-button/register": {
+      "types": "./dist/components/icon-button/register.d.ts",
+      "default": "./dist/components/icon-button/register.js"
+    },
     "./styles": {
       "types": "./dist/styles/index.d.ts",
       "default": "./dist/styles/index.js"

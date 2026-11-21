@@ -439,6 +439,83 @@ describe("<san-button>", () => {
     expect(clickSpy).toHaveBeenCalledOnce();
   });
 
+  it("does not submit or reset a form when click default is prevented", async () => {
+    const form = document.createElement("form");
+    form.innerHTML = `
+      <input name="title" value="initial" />
+      <san-button type="submit">Submit</san-button>
+      <san-button type="reset">Reset</san-button>
+    `;
+    document.body.append(form);
+
+    const input = form.querySelector("input") as HTMLInputElement;
+    const submitBtn = form.querySelector("san-button[type='submit']") as SanButton;
+    const resetBtn = form.querySelector("san-button[type='reset']") as SanButton;
+    await Promise.all([submitBtn.updateComplete, resetBtn.updateComplete]);
+
+    const submitSpy = vi.fn((event: SubmitEvent) => event.preventDefault());
+    form.addEventListener("submit", submitSpy);
+
+    const cancelClick = (event: MouseEvent) => event.preventDefault();
+    submitBtn.addEventListener("click", cancelClick, { capture: true });
+    resetBtn.addEventListener("click", cancelClick, { capture: true });
+
+    input.value = "edited";
+    await userEvent.click(submitBtn);
+    await userEvent.click(resetBtn);
+
+    expect(submitSpy).not.toHaveBeenCalled();
+    expect(input.value).toBe("edited");
+  });
+
+  it("syncs disabled property in a single update cycle and respects ancestor fieldset disabled", async () => {
+    const form = document.createElement("form");
+    form.innerHTML = `
+      <fieldset>
+        <san-button>Toggle disabled</san-button>
+      </fieldset>
+    `;
+    document.body.append(form);
+
+    const fieldset = form.querySelector("fieldset") as HTMLFieldSetElement;
+    const btn = form.querySelector("san-button") as SanButton;
+    await btn.updateComplete;
+
+    const clickSpy = vi.fn();
+    btn.addEventListener("click", clickSpy);
+
+    // Enabling disabled via property must sync :disabled and block clicks in one cycle
+    btn.disabled = true;
+    await btn.updateComplete;
+    const control = getControl(btn) as HTMLButtonElement;
+    expect(btn.hasAttribute("disabled")).toBe(true);
+    expect(btn.matches(":disabled")).toBe(true);
+    expect(control.disabled).toBe(true);
+    btn.click();
+    expect(clickSpy).not.toHaveBeenCalled();
+
+    // Disabling the property back must clear form-disabled state in one cycle when fieldset is enabled
+    btn.disabled = false;
+    await btn.updateComplete;
+    expect(btn.hasAttribute("disabled")).toBe(false);
+    expect(btn.matches(":disabled")).toBe(false);
+    expect(control.disabled).toBe(false);
+    await userEvent.click(btn);
+    expect(clickSpy).toHaveBeenCalledOnce();
+
+    // Toggling host disabled while inside a disabled fieldset keeps the button disabled
+    fieldset.disabled = true;
+    await btn.updateComplete;
+    btn.disabled = true;
+    await btn.updateComplete;
+    btn.disabled = false;
+    await btn.updateComplete;
+    expect(btn.hasAttribute("disabled")).toBe(false);
+    expect(control.disabled).toBe(true);
+    btn.click();
+    expect(clickSpy).toHaveBeenCalledOnce();
+  });
+
   it("shows :focus-visible outline when focused via keyboard", async () => {
     const btn = renderButton(`<san-button>Keyboard Focus</san-button>`);
     await btn.updateComplete;

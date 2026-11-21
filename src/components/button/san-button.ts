@@ -1,26 +1,27 @@
+import { type CSSResultGroup, html, type PropertyValues, type TemplateResult } from "lit";
 import {
-  type CSSResultGroup,
-  html,
-  nothing,
-  type PropertyDeclarations,
-  type PropertyValues,
-} from "lit";
-import { SanctuaryElement } from "../../internal/sanctuary-element.js";
+  ButtonBase,
+  type ButtonIntent as SharedButtonIntent,
+  type ButtonSize as SharedButtonSize,
+  type ButtonType as SharedButtonType,
+  type ButtonVariant as SharedButtonVariant,
+} from "../../internal/button-base.js";
+import { buttonSharedStyles } from "../../internal/button-shared.styles.js";
 import { focusStyles } from "../../styles/focus.js";
 import { resetStyles } from "../../styles/reset.js";
 import { buttonStyles } from "./san-button.styles.js";
 
 /** Visual emphasis variant of `<san-button>`. */
-export type ButtonVariant = "filled" | "soft" | "outlined" | "ghost";
+export type ButtonVariant = SharedButtonVariant;
 
 /** Semantic color intent of `<san-button>`. */
-export type ButtonIntent = "accent" | "danger" | "warning" | "success" | "info";
+export type ButtonIntent = SharedButtonIntent;
 
 /** Control size scale of `<san-button>`. */
-export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonSize = SharedButtonSize;
 
 /** Native button behavior type when not rendered as a link. */
-export type ButtonType = "button" | "submit" | "reset";
+export type ButtonType = SharedButtonType;
 
 function hasAssignedContent(slot: HTMLSlotElement): boolean {
   return slot.assignedNodes({ flatten: true }).some((node) => {
@@ -59,135 +60,20 @@ function hasAssignedContent(slot: HTMLSlotElement): boolean {
  * @cssprop [--san-button-fg] - Override foreground text and icon color.
  * @cssprop [--san-button-border] - Override border color.
  */
-export class SanButton extends SanctuaryElement {
-  static formAssociated = true;
+export class SanButton extends ButtonBase {
+  static override styles: CSSResultGroup = [
+    resetStyles,
+    focusStyles,
+    buttonSharedStyles,
+    buttonStyles,
+  ];
 
-  static override shadowRootOptions: ShadowRootInit = {
-    ...SanctuaryElement.shadowRootOptions,
-    delegatesFocus: true,
-  };
-
-  static override styles: CSSResultGroup = [resetStyles, focusStyles, buttonStyles];
-
-  static override properties: PropertyDeclarations = {
-    variant: { type: String, reflect: true },
-    intent: { type: String, reflect: true },
-    size: { type: String, reflect: true },
-    pill: { type: Boolean, reflect: true },
-    disabled: { type: Boolean, reflect: true },
-    loading: { type: Boolean, reflect: true },
-    type: { type: String, reflect: true },
-    name: { type: String, reflect: true },
-    value: { type: String },
-    href: { type: String },
-    target: { type: String },
-    rel: { type: String },
-    download: { type: String },
-    formAction: { type: String, attribute: "formaction" },
-    formEnctype: { type: String, attribute: "formenctype" },
-    formMethod: { type: String, attribute: "formmethod" },
-    formNoValidate: { type: Boolean, attribute: "formnovalidate" },
-    formTarget: { type: String, attribute: "formtarget" },
-  };
-
-  /**
-   * Visual emphasis style of the button:
-   * - `filled`: Primary call to action following the active glazing.
-   * - `soft`: Medium-emphasis secondary action with tinted pane fill.
-   * - `outlined`: Neutral bordered secondary action.
-   * - `ghost`: Low-emphasis tertiary action.
-   */
-  declare variant: ButtonVariant;
-
-  /** Semantic color intent applied to the button and its focus ring. */
-  declare intent: ButtonIntent;
-
-  /** Size preset controlling minimum block size, padding, and typography. */
-  declare size: ButtonSize;
-
-  /** Uses fully rounded pill corners (`--san-radius-full`). */
-  declare pill: boolean;
-
-  /** Disables the button and removes it from interaction. */
-  declare disabled: boolean;
-
-  /** Shows a loading indicator, preserves width, and blocks activation while staying focusable. */
-  declare loading: boolean;
-
-  /** Native button behavior within an associated form. */
-  declare type: ButtonType;
-
-  /** Field name submitted when this button submits a form. */
-  declare name: string;
-
-  /** Field value submitted when this button submits a form. */
-  declare value: string;
-
-  /** When set, renders an anchor (`<a>`) control instead of a `<button>`. */
-  declare href: string | undefined;
-
-  /** Anchor target window/frame when `href` is set. */
-  declare target: string | undefined;
-
-  /** Link relationship; defaults to `"noopener noreferrer"` when `target === "_blank"` and unset. */
-  declare rel: string | undefined;
-
-  /** Suggests downloading the linked URL instead of navigating when `href` is set. */
-  declare download: string | undefined;
-
-  /** Overrides the form's `action` URL when `type="submit"`. */
-  declare formAction: string | undefined;
-
-  /** Overrides the form's `enctype` when `type="submit"`. */
-  declare formEnctype: string | undefined;
-
-  /** Overrides the form's `method` when `type="submit"`. */
-  declare formMethod: string | undefined;
-
-  /** Skips constraint validation when `type="submit"`. */
-  declare formNoValidate: boolean;
-
-  /** Overrides the form's `target` when `type="submit"`. */
-  declare formTarget: string | undefined;
-
-  #formDisabled = false;
   #hasStart = false;
   #hasEnd = false;
 
-  constructor() {
-    super();
-    this.variant = "filled";
-    this.intent = "accent";
-    this.size = "md";
-    this.pill = false;
-    this.disabled = false;
-    this.loading = false;
-    this.type = "button";
-    this.name = "";
-    this.value = "";
-    this.formNoValidate = false;
-  }
-
-  override connectedCallback(): void {
-    super.connectedCallback();
-    this.addEventListener("click", this.#handleHostClick, { capture: true });
-  }
-
-  override disconnectedCallback(): void {
-    this.removeEventListener("click", this.#handleHostClick, { capture: true });
-    super.disconnectedCallback();
-  }
-
-  /**
-   * Called by the browser when an ancestor `<fieldset>` toggles `disabled`.
-   * Disables the internal control without mutating the host `disabled` attribute.
-   */
-  formDisabledCallback(disabled: boolean): void {
-    this.#formDisabled = disabled;
-    this.requestUpdate();
-  }
-
   protected override willUpdate(changedProperties: PropertyValues<this>): void {
+    super.willUpdate(changedProperties);
+
     if (!this.hasUpdated) {
       this.#hasStart = Array.from(this.children).some(
         (child) => child.getAttribute("slot") === "start",
@@ -195,92 +81,6 @@ export class SanButton extends SanctuaryElement {
       this.#hasEnd = Array.from(this.children).some(
         (child) => child.getAttribute("slot") === "end",
       );
-    }
-
-    if (changedProperties.has("loading")) {
-      this.setCustomState("loading", this.loading);
-    }
-  }
-
-  get #isDisabled(): boolean {
-    return this.disabled || this.#formDisabled;
-  }
-
-  readonly #handleHostClick = (event: MouseEvent): void => {
-    if (this.#isDisabled || this.loading) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    }
-  };
-
-  readonly #handleControlClick = (event: MouseEvent): void => {
-    if (event.defaultPrevented || this.#isDisabled || this.loading || this.href != null) {
-      return;
-    }
-
-    const form = this.internals?.form;
-    if (!form) {
-      return;
-    }
-
-    if (this.type === "reset") {
-      form.reset();
-      return;
-    }
-
-    if (this.type === "submit") {
-      this.#submitForm(form);
-    }
-  };
-
-  #submitForm(form: HTMLFormElement): void {
-    if (this.name) {
-      this.internals?.setFormValue(this.value);
-    }
-
-    const restoreAttributes: Array<() => void> = [];
-    const applyOverride = (attr: string, value: string | null | undefined) => {
-      if (value == null) {
-        return;
-      }
-      const hadAttr = form.hasAttribute(attr);
-      const prev = form.getAttribute(attr);
-      form.setAttribute(attr, value);
-      restoreAttributes.push(() => {
-        if (hadAttr && prev !== null) {
-          form.setAttribute(attr, prev);
-        } else {
-          form.removeAttribute(attr);
-        }
-      });
-    };
-
-    applyOverride("action", this.formAction);
-    applyOverride("enctype", this.formEnctype);
-    applyOverride("method", this.formMethod);
-    applyOverride("target", this.formTarget);
-
-    if (this.formNoValidate) {
-      const hadNoValidate = form.hasAttribute("novalidate");
-      form.setAttribute("novalidate", "");
-      restoreAttributes.push(() => {
-        if (!hadNoValidate) {
-          form.removeAttribute("novalidate");
-        }
-      });
-    }
-
-    try {
-      form.requestSubmit();
-    } finally {
-      for (const restore of restoreAttributes) {
-        restore();
-      }
-      if (this.name) {
-        queueMicrotask(() => {
-          this.internals?.setFormValue(null);
-        });
-      }
     }
   }
 
@@ -302,7 +102,7 @@ export class SanButton extends SanctuaryElement {
     }
   };
 
-  #renderContent() {
+  protected override renderContent(): TemplateResult {
     return html`
       <span part="start" class="start" ?hidden=${!this.#hasStart}>
         <slot name="start" @slotchange=${this.#handleStartSlotChange}></slot>
@@ -314,45 +114,6 @@ export class SanButton extends SanctuaryElement {
         <slot name="end" @slotchange=${this.#handleEndSlotChange}></slot>
       </span>
       <span part="spinner" class="spinner" aria-hidden="true" ?hidden=${!this.loading}></span>
-    `;
-  }
-
-  protected override render() {
-    const disabled = this.#isDisabled;
-
-    if (this.href != null) {
-      const resolvedRel =
-        this.rel ?? (this.target === "_blank" ? "noopener noreferrer" : undefined);
-
-      return html`
-        <a
-          part="base"
-          class="control"
-          href=${disabled ? nothing : this.href}
-          target=${this.target ?? nothing}
-          rel=${resolvedRel ?? nothing}
-          download=${this.download ?? nothing}
-          tabindex=${disabled ? "-1" : nothing}
-          aria-disabled=${disabled || this.loading ? "true" : nothing}
-          aria-busy=${this.loading ? "true" : nothing}
-        >
-          ${this.#renderContent()}
-        </a>
-      `;
-    }
-
-    return html`
-      <button
-        part="base"
-        class="control"
-        type=${this.type}
-        ?disabled=${disabled}
-        aria-disabled=${this.loading ? "true" : nothing}
-        aria-busy=${this.loading ? "true" : nothing}
-        @click=${this.#handleControlClick}
-      >
-        ${this.#renderContent()}
-      </button>
     `;
   }
 }

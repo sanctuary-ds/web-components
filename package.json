@@ -62,6 +62,14 @@
       "types": "./dist/components/icon-button/register.d.ts",
       "default": "./dist/components/icon-button/register.js"
     },
+    "./toggle-button": {
+      "types": "./dist/components/toggle-button/index.d.ts",
+      "default": "./dist/components/toggle-button/index.js"
+    },
+    "./toggle-button/register": {
+      "types": "./dist/components/toggle-button/register.d.ts",
+      "default": "./dist/components/toggle-button/register.js"
+    },
     "./styles": {
       "types": "./dist/styles/index.d.ts",
       "default": "./dist/styles/index.js"

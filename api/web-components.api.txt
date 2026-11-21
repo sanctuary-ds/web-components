@@ -10,6 +10,8 @@
   ./icon-button/register -> { default: ./dist/components/icon-button/register.js, types: ./dist/components/icon-button/register.d.ts }
   ./package.json -> ./package.json
   ./styles -> { default: ./dist/styles/index.js, types: ./dist/styles/index.d.ts }
+  ./toggle-button -> { default: ./dist/components/toggle-button/index.js, types: ./dist/components/toggle-button/index.d.ts }
+  ./toggle-button/register -> { default: ./dist/components/toggle-button/register.js, types: ./dist/components/toggle-button/register.d.ts }
 
 ## Package metadata
   customElements: custom-elements.json
@@ -24,7 +26,10 @@
   src/components/icon-button/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:SanIconButton
   src/components/icon-button/san-icon-button.styles.ts: js:iconButtonStyles
   src/components/icon-button/san-icon-button.ts: js:SanIconButton
-  src/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanButton, js:SanctuaryElement, js:SanIconButton
+  src/components/toggle-button/index.ts: js:SanToggleButton, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
+  src/components/toggle-button/san-toggle-button.styles.ts: js:toggleButtonStyles
+  src/components/toggle-button/san-toggle-button.ts: js:SanToggleButton
+  src/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanButton, js:SanctuaryElement, js:SanIconButton, js:SanToggleButton, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
   src/styles/focus.ts: js:focusStyles
   src/styles/index.ts: js:focusStyles, js:resetStyles
   src/styles/reset.ts: js:resetStyles
@@ -98,3 +103,35 @@
     cssprop --san-icon-button-icon-size = var(--san-size-icon-md)
     cssprop --san-icon-button-radius = var(--san-radius-md)
     cssprop --san-icon-button-size = var(--san-size-control-md)
+  <san-toggle-button> (SanToggleButton)
+    attr disabled: boolean
+    attr intent: ToggleButtonIntent
+    attr label: string
+    attr pill: boolean
+    attr pressed: boolean
+    attr size: ToggleButtonSize
+    attr value: string
+    attr variant: ToggleButtonVariant
+    event change
+    slot (default)
+    slot end
+    slot start
+    part base
+    part end
+    part label
+    part start
+    cssprop --san-toggle-button-bg
+    cssprop --san-toggle-button-bg-hover
+    cssprop --san-toggle-button-border
+    cssprop --san-toggle-button-fg
+    cssprop --san-toggle-button-font = var(--san-type-label-lg)
+    cssprop --san-toggle-button-gap = var(--san-space-2)
+    cssprop --san-toggle-button-height = var(--san-size-control-md)
+    cssprop --san-toggle-button-icon-size = var(--san-size-icon-md)
+    cssprop --san-toggle-button-padding-block = var(--san-space-1-5)
+    cssprop --san-toggle-button-padding-inline = var(--san-space-4)
+    cssprop --san-toggle-button-pressed-bg
+    cssprop --san-toggle-button-pressed-bg-hover
+    cssprop --san-toggle-button-pressed-border
+    cssprop --san-toggle-button-pressed-fg
+    cssprop --san-toggle-button-radius = var(--san-radius-md)

@@ -43,7 +43,7 @@ Cross-repository contracts live in [`tokens/docs/ecosystem.md`](https://github.c
 - [x] `<san-icon-button>`
 - [x] `<san-toggle-button>` / `<san-toggle-button-group>` (stateful pressed button supporting text, icon+text, and icon-only)
 - [x] `<san-chip>` / `<san-badge>`
-- [ ] `<san-card>`
+- [x] `<san-card>`
 
 ### Phase 2: Form controls (`0.2.0`)
 

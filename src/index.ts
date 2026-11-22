@@ -12,6 +12,12 @@ export {
   SanButton,
 } from "./components/button/index.js";
 export {
+  type CardLayout,
+  type CardPadding,
+  type CardVariant,
+  SanCard,
+} from "./components/card/index.js";
+export {
   type ChipIntent,
   type ChipSize,
   type ChipVariant,

@@ -7,6 +7,8 @@
   ./badge/register -> { default: ./dist/components/badge/register.js, types: ./dist/components/badge/register.d.ts }
   ./button -> { default: ./dist/components/button/index.js, types: ./dist/components/button/index.d.ts }
   ./button/register -> { default: ./dist/components/button/register.js, types: ./dist/components/button/register.d.ts }
+  ./card -> { default: ./dist/components/card/index.js, types: ./dist/components/card/index.d.ts }
+  ./card/register -> { default: ./dist/components/card/register.js, types: ./dist/components/card/register.d.ts }
   ./chip -> { default: ./dist/components/chip/index.js, types: ./dist/components/chip/index.d.ts }
   ./chip/register -> { default: ./dist/components/chip/register.js, types: ./dist/components/chip/register.d.ts }
   ./custom-elements.json -> ./custom-elements.json
@@ -32,6 +34,9 @@
   src/components/button/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:SanButton
   src/components/button/san-button.styles.ts: js:buttonStyles
   src/components/button/san-button.ts: js:SanButton
+  src/components/card/index.ts: js:CardLayout, js:CardPadding, js:CardVariant, js:SanCard
+  src/components/card/san-card.styles.ts: js:cardStyles
+  src/components/card/san-card.ts: js:SanCard
   src/components/chip/index.ts: js:ChipIntent, js:ChipSize, js:ChipVariant, js:SanChip
   src/components/chip/san-chip.styles.ts: js:chipStyles
   src/components/chip/san-chip.ts: js:SanChip
@@ -44,7 +49,7 @@
   src/components/toggle-button/index.ts: js:SanToggleButton, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
   src/components/toggle-button/san-toggle-button.styles.ts: js:toggleButtonStyles
   src/components/toggle-button/san-toggle-button.ts: js:SanToggleButton
-  src/index.ts: js:BadgeIntent, js:BadgeSize, js:BadgeVariant, js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:ChipIntent, js:ChipSize, js:ChipVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanBadge, js:SanButton, js:SanChip, js:SanctuaryElement, js:SanIconButton, js:SanToggleButton, js:SanToggleButtonGroup, js:ToggleButtonGroupOrientation, js:ToggleButtonGroupSelection, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
+  src/index.ts: js:BadgeIntent, js:BadgeSize, js:BadgeVariant, js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:CardLayout, js:CardPadding, js:CardVariant, js:ChipIntent, js:ChipSize, js:ChipVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanBadge, js:SanButton, js:SanCard, js:SanChip, js:SanctuaryElement, js:SanIconButton, js:SanToggleButton, js:SanToggleButtonGroup, js:ToggleButtonGroupOrientation, js:ToggleButtonGroupSelection, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
   src/styles/focus.ts: js:focusStyles
   src/styles/index.ts: js:focusStyles, js:resetStyles
   src/styles/reset.ts: js:resetStyles
@@ -112,6 +117,30 @@
     cssprop --san-button-padding-block = var(--san-space-1-5)
     cssprop --san-button-padding-inline = var(--san-space-4)
     cssprop --san-button-radius = var(--san-radius-md)
+  <san-card> (SanCard)
+    attr interactive: boolean
+    attr layout: CardLayout
+    attr padding: CardPadding
+    attr selected: boolean
+    attr variant: CardVariant
+    slot (default)
+    slot footer
+    slot header
+    slot media
+    part base
+    part body
+    part footer
+    part header
+    part media
+    cssprop --san-card-bg
+    cssprop --san-card-border
+    cssprop --san-card-border-hover
+    cssprop --san-card-fg = var(--san-text)
+    cssprop --san-card-gap = var(--san-space-3)
+    cssprop --san-card-media-size = 14rem
+    cssprop --san-card-padding = var(--san-space-5)
+    cssprop --san-card-radius = var(--san-radius-lg)
+    cssprop --san-card-shadow
   <san-chip> (SanChip)
     attr disabled: boolean
     attr intent: ChipIntent

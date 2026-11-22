@@ -47,8 +47,9 @@ Cross-repository contracts live in [`tokens/docs/ecosystem.md`](https://github.c
 
 ### Phase 2: Form controls (`0.2.0`)
 
-- [ ] Shared Form-Associated Custom Element (FACE) controller (`ElementInternals`, constraint validation, form reset/disable)
+- [x] Shared Form-Associated Custom Element (FACE) controller (`ElementInternals`, constraint validation, form reset/disable)
 - [ ] `<san-text-field>`
+- [ ] `<san-textarea>`
 - [ ] `<san-checkbox>`
 - [ ] `<san-radio>` / `<san-radio-group>`
 - [ ] `<san-switch>`
@@ -60,11 +61,28 @@ Cross-repository contracts live in [`tokens/docs/ecosystem.md`](https://github.c
 - [ ] `<san-dialog>` (native `<dialog>` + Top Layer)
 - [ ] `<san-tooltip>` (Popover `hint` + accessible fallback)
 
-### Phase 4: Stabilization & `1.0.0`
+### Phase 4: Composite controls (`0.4.0`)
+
+Built on top of Phase 2 FACE primitives and Phase 3 Popover / Anchor Positioning overlays:
+
+- [ ] `<san-select>` / `<san-option>` (form-associated single/multiple selection)
+- [ ] `<san-combobox>` (filterable ARIA combobox + listbox)
+
+### Phase 5: Stabilization & `1.0.0`
 
 - [ ] Proven in `sanctuary-ds.github.io` `/components` documentation and live interactive demos.
 - [ ] Full Playwright + `axe-core` matrix across `lauds` and `compline` flavors, `forced-colors: active`, and keyboard navigation.
 - [ ] Stable public API report with zero unannounced breaking changes.
+
+### Beyond `1.0.0`: Advanced data entry & display (to evaluate)
+
+High-complexity components to design and scope once the core primitives and overlay architecture are proven:
+
+- [ ] `<san-data-table>` / `<san-table>` (sorting, row selection, sticky headers, pagination/virtualization strategy)
+- [ ] `<san-date-picker>` / `<san-calendar>` / `<san-date-field>` (`Intl` locale handling, time zones, ranges, accessible grid navigation)
+- [ ] `<san-number-field>` (locale-aware formatting, stepping)
+- [ ] `<san-slider>` (single and range selection)
+- [ ] `<san-file-upload>` (dropzone, native file input integration)
 
 ## Working agreement
 

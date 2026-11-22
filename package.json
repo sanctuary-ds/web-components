@@ -46,6 +46,14 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./badge": {
+      "types": "./dist/components/badge/index.d.ts",
+      "default": "./dist/components/badge/index.js"
+    },
+    "./badge/register": {
+      "types": "./dist/components/badge/register.d.ts",
+      "default": "./dist/components/badge/register.js"
+    },
     "./button": {
       "types": "./dist/components/button/index.d.ts",
       "default": "./dist/components/button/index.js"

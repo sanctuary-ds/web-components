@@ -12,6 +12,7 @@
       "!**/coverage",
       "!**/custom-elements.json",
       "!**/CHANGELOG.md",
+      "!**/.release-please-manifest.json",
       "!**/pnpm-lock.yaml",
       "!**/api"
     ]

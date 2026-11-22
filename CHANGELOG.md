@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.1](https://github.com/sanctuary-ds/web-components/compare/v0.1.0...v0.1.1) (2026-11-22)
+
+
+### Features
+
+* **face:** add shared form-associated custom element controller ([afff365](https://github.com/sanctuary-ds/web-components/commit/afff365c36ed3d72186286d3f5a38c9ce3cdf30f))
+
+
+### Bug Fixes
+
+* **face:** refine anchor fallback, sync guards, and constraint test coverage ([81fdb2d](https://github.com/sanctuary-ds/web-components/commit/81fdb2d345809ea96ee6851d27b2781436736661))
+
 ## 0.1.0 (2026-11-22)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@sanctuary-ds/web-components",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Sanctuary Web Components: framework-agnostic Lit 3 component library built on @sanctuary-ds/tokens.",
   "license": "MIT",
   "author": {

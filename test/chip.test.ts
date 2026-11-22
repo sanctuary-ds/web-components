@@ -16,7 +16,13 @@ function renderChip(htmlText: string): SanChip {
 }
 
 async function settleTransitions(el: Element): Promise<void> {
-  await Promise.allSettled(el.getAnimations().map((animation) => animation.finished));
+  // Flush computed styles so pending CSS transitions instantiate before finishing them.
+  void getComputedStyle(el).borderColor;
+  const animations = el.getAnimations();
+  for (const animation of animations) {
+    animation.finish();
+  }
+  await Promise.allSettled(animations.map((animation) => animation.finished));
 }
 
 function getPart<T extends Element = HTMLElement>(el: SanChip, part: string): T {

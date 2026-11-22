@@ -62,6 +62,14 @@
       "types": "./dist/components/button/register.d.ts",
       "default": "./dist/components/button/register.js"
     },
+    "./chip": {
+      "types": "./dist/components/chip/index.d.ts",
+      "default": "./dist/components/chip/index.js"
+    },
+    "./chip/register": {
+      "types": "./dist/components/chip/register.d.ts",
+      "default": "./dist/components/chip/register.js"
+    },
     "./icon-button": {
       "types": "./dist/components/icon-button/index.d.ts",
       "default": "./dist/components/icon-button/index.js"

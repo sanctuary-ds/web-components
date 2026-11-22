@@ -11,6 +11,12 @@ export {
   type ButtonVariant,
   SanButton,
 } from "./components/button/index.js";
+export {
+  type ChipIntent,
+  type ChipSize,
+  type ChipVariant,
+  SanChip,
+} from "./components/chip/index.js";
 export { SanIconButton } from "./components/icon-button/index.js";
 export {
   SanToggleButton,

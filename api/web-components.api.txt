@@ -7,6 +7,8 @@
   ./badge/register -> { default: ./dist/components/badge/register.js, types: ./dist/components/badge/register.d.ts }
   ./button -> { default: ./dist/components/button/index.js, types: ./dist/components/button/index.d.ts }
   ./button/register -> { default: ./dist/components/button/register.js, types: ./dist/components/button/register.d.ts }
+  ./chip -> { default: ./dist/components/chip/index.js, types: ./dist/components/chip/index.d.ts }
+  ./chip/register -> { default: ./dist/components/chip/register.js, types: ./dist/components/chip/register.d.ts }
   ./custom-elements.json -> ./custom-elements.json
   ./icon-button -> { default: ./dist/components/icon-button/index.js, types: ./dist/components/icon-button/index.d.ts }
   ./icon-button/register -> { default: ./dist/components/icon-button/register.js, types: ./dist/components/icon-button/register.d.ts }
@@ -30,6 +32,9 @@
   src/components/button/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:SanButton
   src/components/button/san-button.styles.ts: js:buttonStyles
   src/components/button/san-button.ts: js:SanButton
+  src/components/chip/index.ts: js:ChipIntent, js:ChipSize, js:ChipVariant, js:SanChip
+  src/components/chip/san-chip.styles.ts: js:chipStyles
+  src/components/chip/san-chip.ts: js:SanChip
   src/components/icon-button/index.ts: js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:SanIconButton
   src/components/icon-button/san-icon-button.styles.ts: js:iconButtonStyles
   src/components/icon-button/san-icon-button.ts: js:SanIconButton
@@ -39,7 +44,7 @@
   src/components/toggle-button/index.ts: js:SanToggleButton, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
   src/components/toggle-button/san-toggle-button.styles.ts: js:toggleButtonStyles
   src/components/toggle-button/san-toggle-button.ts: js:SanToggleButton
-  src/index.ts: js:BadgeIntent, js:BadgeSize, js:BadgeVariant, js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanBadge, js:SanButton, js:SanctuaryElement, js:SanIconButton, js:SanToggleButton, js:SanToggleButtonGroup, js:ToggleButtonGroupOrientation, js:ToggleButtonGroupSelection, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
+  src/index.ts: js:BadgeIntent, js:BadgeSize, js:BadgeVariant, js:ButtonIntent, js:ButtonSize, js:ButtonType, js:ButtonVariant, js:ChipIntent, js:ChipSize, js:ChipVariant, js:defineElement, js:focusStyles, js:resetStyles, js:SanBadge, js:SanButton, js:SanChip, js:SanctuaryElement, js:SanIconButton, js:SanToggleButton, js:SanToggleButtonGroup, js:ToggleButtonGroupOrientation, js:ToggleButtonGroupSelection, js:ToggleButtonIntent, js:ToggleButtonSize, js:ToggleButtonVariant
   src/styles/focus.ts: js:focusStyles
   src/styles/index.ts: js:focusStyles, js:resetStyles
   src/styles/reset.ts: js:resetStyles
@@ -107,6 +112,42 @@
     cssprop --san-button-padding-block = var(--san-space-1-5)
     cssprop --san-button-padding-inline = var(--san-space-4)
     cssprop --san-button-radius = var(--san-radius-md)
+  <san-chip> (SanChip)
+    attr disabled: boolean
+    attr intent: ChipIntent
+    attr pill: boolean
+    attr removable: boolean
+    attr remove-label: string
+    attr selectable: boolean
+    attr selected: boolean
+    attr size: ChipSize
+    attr value: string
+    attr variant: ChipVariant
+    event change
+    event remove
+    slot (default)
+    slot end
+    slot start
+    part action
+    part base
+    part end
+    part label
+    part remove
+    part start
+    cssprop --san-chip-bg
+    cssprop --san-chip-bg-hover
+    cssprop --san-chip-border
+    cssprop --san-chip-fg
+    cssprop --san-chip-font = var(--san-type-label-lg)
+    cssprop --san-chip-gap = var(--san-space-1-5)
+    cssprop --san-chip-height = var(--san-size-control-sm)
+    cssprop --san-chip-icon-size = var(--san-size-icon-sm)
+    cssprop --san-chip-padding-inline = var(--san-space-3)
+    cssprop --san-chip-radius = var(--san-radius-md)
+    cssprop --san-chip-selected-bg
+    cssprop --san-chip-selected-bg-hover
+    cssprop --san-chip-selected-border
+    cssprop --san-chip-selected-fg
   <san-icon-button> (SanIconButton)
     attr disabled: boolean
     attr download: string | undefined

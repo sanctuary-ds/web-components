@@ -124,9 +124,11 @@ export abstract class FormControlElement extends SanctuaryElement {
   }
 
   protected override willUpdate(changedProperties: PropertyValues<this>): void {
+    super.willUpdate(changedProperties);
     if (changedProperties.has("disabled")) {
-      // Sync host attribute before render() so the browser's FACE
-      // formDisabledCallback updates formDisabled in the same update cycle.
+      // Lit's `reflect: true` updates host attributes in `updated()` (after render).
+      // Sync `disabled` before render so `:disabled` and native FACE disabled hooks
+      // align with the shadow control during the same render pass.
       this.toggleAttribute("disabled", this.disabled);
     }
   }
@@ -149,7 +151,7 @@ export abstract class FormControlElement extends SanctuaryElement {
   /** Returns the current form submission value (`null` omits the field from `FormData`). */
   protected abstract getFormValue(): FormValue;
 
-  /** Optional state snapshot stored separately from submission value for browser restore. */
+  /** State snapshot stored for browser restore; defaults to `getFormValue()`. */
   protected getFormState(): FormValue {
     return this.getFormValue();
   }

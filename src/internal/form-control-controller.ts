@@ -93,6 +93,7 @@ export class FormControlController implements ReactiveController {
   #isInvalid = false;
   #isUserInvalid = false;
   #isUserValid = false;
+  #reconcilingAfterUpdate = false;
 
   /**
    * Extracts built-in `ValidityStateFlags`, `validationMessage`, and focus anchor
@@ -177,7 +178,7 @@ export class FormControlController implements ReactiveController {
 
   /** Whether the control is a candidate for constraint validation. */
   get willValidate(): boolean {
-    if (this.isDisabled || this.#options.isReadOnly?.()) {
+    if (this.#isBarred) {
       return false;
     }
     return this.#options.getInternals()?.willValidate ?? false;
@@ -194,8 +195,11 @@ export class FormControlController implements ReactiveController {
   hostUpdated(): void {
     const prevUserInvalid = this.#isUserInvalid;
     this.sync();
-    if (this.#isUserInvalid !== prevUserInvalid) {
+    if (this.#isUserInvalid !== prevUserInvalid && !this.#reconcilingAfterUpdate) {
+      this.#reconcilingAfterUpdate = true;
       this.#host.requestUpdate();
+    } else {
+      this.#reconcilingAfterUpdate = false;
     }
   }
 
@@ -233,22 +237,14 @@ export class FormControlController implements ReactiveController {
   /** Sets or clears a custom constraint validation error message. */
   setCustomValidity(message: string): void {
     this.#customValidityMessage = message;
-    const prevUserInvalid = this.#isUserInvalid;
-    this.syncValidity();
-    if (this.#isUserInvalid !== prevUserInvalid) {
-      this.#host.requestUpdate();
-    }
+    this.#syncValidityAndNotify();
   }
 
   /** Records user input on text-like controls; recovers live if validation is already visible. */
   markDirty(): void {
     this.#dirty = true;
     if (this.#showValidation) {
-      const prevUserInvalid = this.#isUserInvalid;
-      this.syncValidity();
-      if (this.#isUserInvalid !== prevUserInvalid) {
-        this.#host.requestUpdate();
-      }
+      this.#syncValidityAndNotify();
     }
   }
 
@@ -304,9 +300,8 @@ export class FormControlController implements ReactiveController {
   /** Synchronizes constraint validation flags, message, anchor, and custom CSS states. */
   syncValidity(): void {
     const internals = this.#options.getInternals();
-    const barred = this.isDisabled || Boolean(this.#options.isReadOnly?.());
 
-    if (barred) {
+    if (this.#isBarred) {
       if (internals && typeof internals.setValidity === "function") {
         internals.setValidity({});
       }
@@ -339,9 +334,9 @@ export class FormControlController implements ReactiveController {
       } else {
         const message =
           this.#customValidityMessage || input.message?.trim() || FALLBACK_VALIDATION_MESSAGE;
-        const anchor = this.#resolveValidAnchor(
-          input.anchor ?? this.#options.getValidationAnchor?.(),
-        );
+        const anchor =
+          this.#resolveValidAnchor(input.anchor) ??
+          this.#resolveValidAnchor(this.#options.getValidationAnchor?.());
         if (anchor) {
           internals.setValidity(mergedFlags, message, anchor);
         } else {
@@ -396,10 +391,18 @@ export class FormControlController implements ReactiveController {
     this.#revealValidation();
   };
 
+  get #isBarred(): boolean {
+    return this.isDisabled || Boolean(this.#options.isReadOnly?.());
+  }
+
   #revealValidation(): void {
+    this.#showValidation = true;
+    this.#syncValidityAndNotify();
+  }
+
+  #syncValidityAndNotify(): void {
     const prevUserInvalid = this.#isUserInvalid;
     const prevUserValid = this.#isUserValid;
-    this.#showValidation = true;
     this.syncValidity();
     if (this.#isUserInvalid !== prevUserInvalid || this.#isUserValid !== prevUserValid) {
       this.#host.requestUpdate();
@@ -407,7 +410,7 @@ export class FormControlController implements ReactiveController {
   }
 
   #updateCustomStates(): void {
-    const barred = this.isDisabled || Boolean(this.#options.isReadOnly?.());
+    const barred = this.#isBarred;
     const invalid = !barred && this.#isInvalid;
     const userInvalid = !barred && this.#showValidation && invalid;
     const userValid = !barred && this.#showValidation && !invalid;

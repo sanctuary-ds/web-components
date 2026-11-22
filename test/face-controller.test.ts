@@ -1,5 +1,7 @@
 import { css, html, nothing, type PropertyDeclarations } from "lit";
+import { live } from "lit/directives/live.js";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { userEvent } from "vitest/browser";
 import { defineElement, focusStyles, resetStyles } from "../src/index.js";
 import { FormControlController } from "../src/internal/form-control-controller.js";
 import { FormControlElement } from "../src/internal/form-control-element.js";
@@ -86,6 +88,10 @@ class TestTextProbe extends FormControlElement {
     return this.showError;
   }
 
+  resetValidationInteraction(): void {
+    this.formControl.resetInteraction();
+  }
+
   protected override get isReadOnly(): boolean {
     return this.readOnly;
   }
@@ -137,7 +143,7 @@ class TestTextProbe extends FormControlElement {
       <input
         id="input"
         type=${this.type}
-        .value=${this.value}
+        .value=${live(this.value)}
         ?disabled=${this.isDisabled}
         ?required=${this.required}
         ?readonly=${this.readOnly}
@@ -471,6 +477,43 @@ describe("Shared FACE controller (FormControlController & FormControlElement)", 
     expect(field.reportValidity()).toBe(false);
     await field.updateComplete;
     expect(field.matches(":state(user-invalid)")).toBe(true);
+
+    // resetInteraction() clears user-invalid/user-valid without mutating value
+    field.resetValidationInteraction();
+    await field.updateComplete;
+    expect(field.matches(":state(user-invalid)")).toBe(false);
+    expect(field.matches(":state(user-valid)")).toBe(false);
+    expect(field.exposedShowError).toBe(false);
+    expect(field.matches(":state(invalid)")).toBe(true);
+  });
+
+  it("propagates native patternMismatch and tooShort constraints through fromNativeControl", async () => {
+    const form = document.createElement("form");
+    const field = document.createElement(TEXT_TAG) as TestTextProbe;
+    field.name = "code";
+    field.pattern = "[A-Z]{3}";
+    field.minLength = 3;
+
+    form.append(field);
+    document.body.append(form);
+    await field.updateComplete;
+
+    const input = field.inputElement as HTMLInputElement;
+    input.focus();
+    await userEvent.type(input, "ab");
+    await field.updateComplete;
+
+    expect(field.validity.tooShort).toBe(true);
+    expect(field.validity.patternMismatch).toBe(true);
+    expect(field.validity.valid).toBe(false);
+
+    await userEvent.clear(input);
+    await userEvent.type(input, "ABC");
+    await field.updateComplete;
+
+    expect(field.validity.tooShort).toBe(false);
+    expect(field.validity.patternMismatch).toBe(false);
+    expect(field.validity.valid).toBe(true);
   });
 
   it("supports custom ValidityStateFlags, immediate commit on discrete controls, safe fallbacks, and state restore", async () => {
@@ -501,11 +544,15 @@ describe("Shared FACE controller (FormControlController & FormControlElement)", 
     expect(choice.matches(":state(user-invalid)")).toBe(true);
 
     // Guard against empty message and detached anchor (must not throw TypeError / NotFoundError)
+    // and fall back to getValidationAnchor() so focus still lands on the connected inner control
     choice.omitMessage = true;
     choice.useDetachedAnchor = true;
     await choice.updateComplete;
     expect(choice.validity.valueMissing).toBe(true);
     expect(choice.validationMessage).not.toBe("");
+    form.requestSubmit();
+    expect(document.activeElement).toBe(choice);
+    expect(choice.shadowRoot?.activeElement).toBe(choice.buttonElement);
 
     // formStateRestoreCallback restores state and syncs FormData + validity
     choice.formStateRestoreCallback("checked", "restore");

@@ -130,6 +130,7 @@
     slot start
     part action
     part base
+    part checkmark
     part end
     part label
     part remove
@@ -138,11 +139,11 @@
     cssprop --san-chip-bg-hover
     cssprop --san-chip-border
     cssprop --san-chip-fg
-    cssprop --san-chip-font = var(--san-type-label-lg)
+    cssprop --san-chip-font = var(--san-type-label-md)
     cssprop --san-chip-gap = var(--san-space-1-5)
-    cssprop --san-chip-height = var(--san-size-control-sm)
-    cssprop --san-chip-icon-size = var(--san-size-icon-sm)
-    cssprop --san-chip-padding-inline = var(--san-space-3)
+    cssprop --san-chip-height = 1.75rem
+    cssprop --san-chip-icon-size = 0.875rem
+    cssprop --san-chip-padding-inline = var(--san-space-2-5)
     cssprop --san-chip-radius = var(--san-radius-md)
     cssprop --san-chip-selected-bg
     cssprop --san-chip-selected-bg-hover

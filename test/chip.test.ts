@@ -167,6 +167,48 @@ describe("<san-chip>", () => {
     expect(changes).toHaveLength(2);
   });
 
+  it("gates :state(selected) and [part='checkmark'] to selectable chips without a start slot", async () => {
+    const nonSelectable = renderChip(`<san-chip selected>Static</san-chip>`);
+    await nonSelectable.updateComplete;
+
+    expect(nonSelectable.selected).toBe(true);
+    expect(nonSelectable.matches(":state(selected)")).toBe(false);
+    expect(nonSelectable.shadowRoot?.querySelector("[part='checkmark']")).toBeNull();
+    expect(getComputedStyle(getPart(nonSelectable, "base")).backgroundColor).toBe(
+      "rgba(0, 0, 0, 0)",
+    );
+
+    const selectable = renderChip(`<san-chip selectable>Filter</san-chip>`);
+    await selectable.updateComplete;
+    expect(selectable.shadowRoot?.querySelector("[part='checkmark']")).toBeNull();
+
+    selectable.selected = true;
+    await selectable.updateComplete;
+    const action = getPart<HTMLButtonElement>(selectable, "action");
+    const checkmark = action.querySelector("[part='checkmark']");
+    expect(checkmark).not.toBeNull();
+    expect(checkmark?.getAttribute("aria-hidden")).toBe("true");
+    expect(checkmark?.querySelector("svg")).not.toBeNull();
+
+    const startIcon = document.createElement("span");
+    startIcon.slot = "start";
+    startIcon.textContent = "*";
+    selectable.append(startIcon);
+    await Promise.resolve();
+    await selectable.updateComplete;
+    expect(selectable.shadowRoot?.querySelector("[part='checkmark']")).toBeNull();
+
+    startIcon.remove();
+    await Promise.resolve();
+    await selectable.updateComplete;
+    expect(selectable.shadowRoot?.querySelector("[part='checkmark']")).not.toBeNull();
+
+    selectable.selectable = false;
+    await selectable.updateComplete;
+    expect(selectable.matches(":state(selected)")).toBe(false);
+    expect(selectable.shadowRoot?.querySelector("[part='checkmark']")).toBeNull();
+  });
+
   it("suppresses selection and click propagation when disabled or preventDefault() is called", async () => {
     const disabledEl = renderChip(`<san-chip selectable disabled>Locked</san-chip>`);
     await disabledEl.updateComplete;
@@ -241,13 +283,20 @@ describe("<san-chip>", () => {
 
   it("computes removeLabel fallback and guards null/undefined overrides", async () => {
     const withText = renderChip(`<san-chip removable>  TypeScript  </san-chip>`);
+    const withComment = renderChip(`<san-chip removable><!-- internal -->TypeScript</san-chip>`);
     const withoutText = renderChip(`<san-chip removable>${SAMPLE_ICON}</san-chip>`);
     const custom = renderChip(
       `<san-chip removable remove-label="Delete filter">TypeScript</san-chip>`,
     );
-    await Promise.all([withText.updateComplete, withoutText.updateComplete, custom.updateComplete]);
+    await Promise.all([
+      withText.updateComplete,
+      withComment.updateComplete,
+      withoutText.updateComplete,
+      custom.updateComplete,
+    ]);
 
     expect(getPart(withText, "remove").getAttribute("aria-label")).toBe("Remove TypeScript");
+    expect(getPart(withComment, "remove").getAttribute("aria-label")).toBe("Remove TypeScript");
     expect(getPart(withoutText, "remove").getAttribute("aria-label")).toBe("Remove");
     expect(getPart(custom, "remove").getAttribute("aria-label")).toBe("Delete filter");
 
@@ -287,6 +336,7 @@ describe("<san-chip>", () => {
           const base = getPart(el, "base");
           const unselectedStyles = getComputedStyle(base);
           const unselectedBg = unselectedStyles.backgroundColor;
+          const unselectedBorder = unselectedStyles.borderColor;
           bgSet.add(unselectedBg);
           fgSet.add(unselectedStyles.color);
 
@@ -295,16 +345,24 @@ describe("<san-chip>", () => {
           } else {
             expect(unselectedBg).not.toBe("rgba(0, 0, 0, 0)");
           }
+          if (variant === "filled") {
+            expect(unselectedStyles.boxShadow).toBe("none");
+          }
 
           await expectAccessible(el);
 
           el.selected = true;
           await el.updateComplete;
           await settleTransitions(base);
-          const selectedBg = getComputedStyle(base).backgroundColor;
+          const selectedStyles = getComputedStyle(base);
+          const selectedBg = selectedStyles.backgroundColor;
           expect(selectedBg).not.toBe("rgba(0, 0, 0, 0)");
-          if (variant !== "filled" || intent === "neutral") {
+          expect(selectedStyles.boxShadow).toBe("none");
+          expect(selectedStyles.backgroundImage).toBe("none");
+          if (variant !== "soft" || intent === "neutral") {
             expect(selectedBg).not.toBe(unselectedBg);
+          } else {
+            expect(selectedStyles.borderColor).not.toBe(unselectedBorder);
           }
 
           await expectAccessible(el);
@@ -331,16 +389,16 @@ describe("<san-chip>", () => {
     await Promise.all([sm.updateComplete, md.updateComplete, lg.updateComplete]);
 
     expect(sm.getBoundingClientRect().height).toBeCloseTo(24, 0);
-    expect(md.getBoundingClientRect().height).toBeCloseTo(32, 0);
-    expect(lg.getBoundingClientRect().height).toBeCloseTo(40, 0);
+    expect(md.getBoundingClientRect().height).toBeCloseTo(28, 0);
+    expect(lg.getBoundingClientRect().height).toBeCloseTo(32, 0);
     expect(
       Number.parseFloat(getComputedStyle(getPart(lg, "base")).borderRadius),
     ).toBeGreaterThanOrEqual(999);
 
     const startSvg = sm.querySelector("svg[slot='start']") as SVGSVGElement;
     const endSvg = lg.querySelector("svg[slot='end']") as SVGSVGElement;
-    expect(startSvg.getBoundingClientRect().width).toBeCloseTo(14, 0);
-    expect(endSvg.getBoundingClientRect().width).toBeCloseTo(20, 0);
+    expect(startSvg.getBoundingClientRect().width).toBeCloseTo(12, 0);
+    expect(endSvg.getBoundingClientRect().width).toBeCloseTo(16, 0);
   });
 
   it("truncates long labels to a single line with ellipsis under max-inline-size", async () => {
@@ -354,7 +412,7 @@ describe("<san-chip>", () => {
     expect(labelStyles.whiteSpace).toBe("nowrap");
     expect(labelStyles.overflow).toBe("hidden");
     expect(labelStyles.textOverflow).toBe("ellipsis");
-    expect(el.getBoundingClientRect().height).toBeCloseTo(32, 0);
+    expect(el.getBoundingClientRect().height).toBeCloseTo(28, 0);
     expect(el.getBoundingClientRect().width).toBeLessThanOrEqual(145);
     expect(labelEl.scrollWidth).toBeGreaterThan(labelEl.clientWidth);
   });

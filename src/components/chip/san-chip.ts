@@ -41,6 +41,7 @@ function hasAssignedContent(slot: HTMLSlotElement): boolean {
  *
  * @csspart base - Outer chip container wrapping the action/content and optional remove button.
  * @csspart action - Native `<button type="button">` rendered when `selectable` is true.
+ * @csspart checkmark - Built-in leading checkmark container rendered inside `action` when `selectable` and `selected` are true without a `start` slot.
  * @csspart start - Container wrapping the `start` slot.
  * @csspart label - Container wrapping the default slot.
  * @csspart end - Container wrapping the `end` slot.
@@ -51,10 +52,10 @@ function hasAssignedContent(slot: HTMLSlotElement): boolean {
  *
  * @cssprop [--san-chip-radius=var(--san-radius-md)] - Border radius of the chip (`--san-radius-sm` on `sm`, `--san-radius-full` when `pill` is set).
  * @cssprop [--san-chip-gap=var(--san-space-1-5)] - Spacing between `start`, `label`, and `end` parts (`--san-space-1` on `sm`, `--san-space-2` on `lg`).
- * @cssprop [--san-chip-height=var(--san-size-control-sm)] - Minimum block size (`min-block-size`) of the chip (`1.5rem` on `sm`, `2.5rem` on `lg`).
- * @cssprop [--san-chip-padding-inline=var(--san-space-3)] - Inline padding (`padding-inline`) of the chip content (`--san-space-2` on `sm`, `--san-space-4` on `lg`).
- * @cssprop [--san-chip-font=var(--san-type-label-lg)] - Typography shorthand for the chip label.
- * @cssprop [--san-chip-icon-size=var(--san-size-icon-sm)] - Inline and block size of slotted icons (`0.875rem` on `sm`, `--san-size-icon-md` on `lg`).
+ * @cssprop [--san-chip-height=1.75rem] - Minimum block size (`min-block-size`) of the chip (`1.5rem` on `sm`, `var(--san-size-control-sm)` on `lg`).
+ * @cssprop [--san-chip-padding-inline=var(--san-space-2-5)] - Inline padding (`padding-inline`) of the chip content (`--san-space-2` on `sm`, `--san-space-3` on `lg`).
+ * @cssprop [--san-chip-font=var(--san-type-label-md)] - Typography shorthand for the chip label (`--san-type-label-sm` on `sm`, `--san-type-label-lg` on `lg`).
+ * @cssprop [--san-chip-icon-size=0.875rem] - Inline and block size of slotted icons and the built-in checkmark (`0.75rem` on `sm`, `var(--san-size-icon-sm)` on `lg`).
  * @cssprop [--san-chip-bg] - Override unselected background color.
  * @cssprop [--san-chip-bg-hover] - Override unselected hover background color.
  * @cssprop [--san-chip-fg] - Override unselected foreground color.
@@ -100,7 +101,7 @@ export class SanChip extends SanctuaryElement {
   /** Renders the chip content inside an interactive toggle `<button>` with `aria-pressed`. */
   declare selectable: boolean;
 
-  /** Whether a selectable chip is currently selected (`:state(selected)` + illuminated glazing). */
+  /** Whether a selectable chip is currently selected (`:state(selected)` + tinted glass pane). */
   declare selected: boolean;
 
   /** Renders a sibling remove `<button>` that emits a cancelable `remove` event. */
@@ -152,8 +153,8 @@ export class SanChip extends SanctuaryElement {
       );
     }
 
-    if (changedProperties.has("selected")) {
-      this.setCustomState("selected", this.selected);
+    if (changedProperties.has("selected") || changedProperties.has("selectable")) {
+      this.setCustomState("selected", this.selectable && this.selected);
     }
   }
 
@@ -163,7 +164,9 @@ export class SanChip extends SanctuaryElement {
       return defaultSlot.assignedNodes({ flatten: true });
     }
     return Array.from(this.childNodes).filter(
-      (node) => node.nodeType !== Node.ELEMENT_NODE || !(node as Element).hasAttribute("slot"),
+      (node) =>
+        node.nodeType === Node.TEXT_NODE ||
+        (node.nodeType === Node.ELEMENT_NODE && !(node as Element).hasAttribute("slot")),
     );
   }
 
@@ -271,6 +274,25 @@ export class SanChip extends SanctuaryElement {
                 @click=${this.#handleActionClick}
                 @keydown=${this.#handleActionKeyDown}
               >
+                ${
+                  this.selected && !this.#hasStart
+                    ? html`
+                      <span part="checkmark" class="checkmark" aria-hidden="true">
+                        <svg
+                          class="checkmark-icon"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M3.5 8.5 6.5 11.5 12.5 4.5" />
+                        </svg>
+                      </span>
+                    `
+                    : nothing
+                }
                 ${this.#renderSlots()}
               </button>
             `
